@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p style="font-size: 20px; font-weight: bold">😎 Arya Logo 😎</p>
+          <h3 id="loggedInUser"></h3>
+          <!-- Tampilkan informasi pengguna yang login -->
+          <input
+            style="height: 30px; max-width: 200px"
+            type="text"
+            placeholder="Cari Sesuatu.."
+          />
+        </div>
+      </header>
+
+      <aside>
+        <ul>
+          <li><a href="./index.html">List</a></li>
+          <li><a href="./form.html">Form</a></li>
+          <li><a href="./video.html">Video</a></li>
+          <li><a href="./maps.html">Maps</a></li>
+          <li id="loginStatus">
+            <a href="./login.html">Login</a>
+          </li>
+        </ul>
+      </aside>
+
+      <main>
+        <article>
+          <h2>Kita ada disini</h2>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.702707215107!2d106.81906417372143!3d-6.302737461680852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edfe80436739%3A0x15362d8dc3d0d96a!2sBank%20BRI%20Corporate%20University!5e0!3m2!1sid!2sid!4v1685003732538!5m2!1sid!2sid"
+            width="450"
+            height="300"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </article>
+      </main>
+    </div>
+    <footer>
+      <h4>Dibuat dengan ❤️ oleh Arya</h4>
+      <p>Latihan HTML & CSS & Javascript DOM &copy; Copyright 2023</p>
+    </footer>
+    <script>
+      // Check if user is logged in
+      function checkLoginStatus() {
+        var isLoggedIn = localStorage.getItem("isLoggedIn");
+        var loggedInUser = localStorage.getItem("loggedInUser");
+
+        if (isLoggedIn) {
+          document.getElementById("loginStatus").innerHTML =
+            '<a href="#" onclick="logout()">Logout</a>';
+          document.getElementById("loggedInUser").textContent =
+            "User yang Login: " + loggedInUser;
+        }
+      }
+
+      // Function to log out the user
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("loggedInUser");
+        document.getElementById("loginStatus").innerHTML =
+          '<a href="./login.html">Login</a>';
+        document.getElementById("loggedInUser").textContent = "";
+      }
+
+      checkLoginStatus();
+    </script>
+  </body>
+</html>

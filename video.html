@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p style="font-size: 20px; font-weight: bold">😎 Arya Logo 😎</p>
+          <h3 id="loggedInUser"></h3>
+          <!-- Tampilkan informasi pengguna yang login -->
+          <input
+            style="height: 30px; max-width: 200px"
+            type="text"
+            placeholder="Cari Sesuatu.."
+          />
+        </div>
+      </header>
+
+      <aside>
+        <ul>
+          <li><a href="./index.html">List</a></li>
+          <li><a href="./form.html">Form</a></li>
+          <li><a href="./video.html">Video</a></li>
+          <li><a href="./maps.html">Maps</a></li>
+          <li id="loginStatus">
+            <a href="./login.html">Login</a>
+          </li>
+        </ul>
+      </aside>
+
+      <main>
+        <article>
+          <h2>Ini Video Carousel</h2>
+          <div class="content-slide">
+            <div class="imgslide fade">
+              <div class="numberslide">1 / 3</div>
+              <div class="video-container">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/ewZ_YWbIWXI"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="text">Tutorial 1</div>
+            </div>
+
+            <div class="imgslide fade">
+              <div class="numberslide">2 / 3</div>
+              <div class="video-container">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/LCazeH934fA"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="text">Tutorial 2</div>
+            </div>
+
+            <div class="imgslide fade">
+              <div class="numberslide">3 / 3</div>
+              <div class="video-container">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/NS3EymTXZm8"
+                  title="YouTube video player"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="text">Tutorial 3</div>
+            </div>
+
+            <a class="prev" onClick="nextslide(-1)">&#10094;</a>
+            <a class="next" onClick="nextslide(1)">&#10095;</a>
+          </div>
+
+          <div class="page">
+            <span class="dot" onClick="dotslide(1)"></span>
+            <span class="dot" onClick="dotslide(2)"></span>
+            <span class="dot" onClick="dotslide(3)"></span>
+          </div>
+        </article>
+      </main>
+    </div>
+    <footer>
+      <h4>Dibuat dengan ❤️ oleh Arya</h4>
+      <p>Latihan HTML & CSS & Javascript DOM &copy; Copyright 2023</p>
+    </footer>
+    <script>
+      // Check if user is logged in
+      function checkLoginStatus() {
+        var isLoggedIn = localStorage.getItem("isLoggedIn");
+        var loggedInUser = localStorage.getItem("loggedInUser");
+
+        if (isLoggedIn) {
+          document.getElementById("loginStatus").innerHTML =
+            '<a href="#" onclick="logout()">Logout</a>';
+          document.getElementById("loggedInUser").textContent =
+            "User yang Login: " + loggedInUser;
+        }
+      }
+
+      // Function to log out the user
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("loggedInUser");
+        document.getElementById("loginStatus").innerHTML =
+          '<a href="./login.html">Login</a>';
+        document.getElementById("loggedInUser").textContent = "";
+      }
+
+      checkLoginStatus();
+
+      var slideIndex = 1;
+      showSlide(slideIndex);
+
+      function nextslide(n) {
+        showSlide((slideIndex += n));
+      }
+
+      function dotslide(n) {
+        showSlide((slideIndex = n));
+      }
+
+      function showSlide(n) {
+        var i;
+        var slides = document.getElementsByClassName("imgslide");
+        var dot = document.getElementsByClassName("dot");
+
+        if (n > slides.length) {
+          slideIndex = 1;
+        }
+        if (n < 1) {
+          slideIndex = slides.length;
+        }
+        for (i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+
+        for (i = 0; i < slides.length; i++) {
+          dot[i].className = dot[i].className.replace(" active", "");
+        }
+
+        slides[slideIndex - 1].style.display = "block";
+
+        dot[slideIndex - 1].className += " active";
+      }
+    </script>
+  </body>
+</html>

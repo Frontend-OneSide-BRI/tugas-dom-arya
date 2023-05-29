@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p style="font-size: 20px; font-weight: bold">😎 Arya Logo 😎</p>
+          <h3 id="loggedInUser"></h3>
+          <!-- Tampilkan informasi pengguna yang login -->
+          <input
+            style="height: 30px; max-width: 200px"
+            type="text"
+            placeholder="Cari Sesuatu.."
+          />
+        </div>
+      </header>
+
+      <aside>
+        <ul>
+          <li><a href="./index.html">List</a></li>
+          <li><a href="./form.html">Form</a></li>
+          <li><a href="./video.html">Video</a></li>
+          <li><a href="./maps.html">Maps</a></li>
+          <li id="loginStatus">
+            <a href="./login.html">Login</a>
+          </li>
+        </ul>
+      </aside>
+
+      <main>
+        <div style="text-align: center">
+          <h2>Silahkan Login</h2>
+          <article>
+            <form id="loginForm" action="/action_page.php">
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required />
+              </div>
+              <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required />
+              </div>
+              <input type="submit" value="Submit" />
+            </form>
+          </article>
+        </div>
+      </main>
+    </div>
+    <footer>
+      <h4>Dibuat dengan ❤️ oleh Arya</h4>
+      <p>Latihan HTML & CSS & Javascript DOM &copy; Copyright 2023</p>
+    </footer>
+    <script>
+      // Check if user is logged in
+      function checkLoginStatus() {
+        var isLoggedIn = localStorage.getItem("isLoggedIn");
+        var loggedInUser = localStorage.getItem("loggedInUser");
+
+        if (isLoggedIn) {
+          document.getElementById("loginStatus").innerHTML =
+            '<a href="#" onclick="logout()">Logout</a>';
+          document.getElementById("loggedInUser").textContent =
+            "User yang Login: " + loggedInUser;
+        }
+      }
+
+      // Function to log out the user
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("loggedInUser");
+        document.getElementById("loginStatus").innerHTML =
+          '<a href="./login.html">Login</a>';
+        document.getElementById("loggedInUser").textContent = "";
+      }
+
+      // Function to handle form submission
+      function handleFormSubmit(e) {
+        e.preventDefault(); // Prevent form submission
+
+        // Get form values
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+
+        // Perform login validation here
+        // ...
+
+        // Set login status and logged in user in local storage
+        localStorage.setItem("isLoggedIn", true);
+        localStorage.setItem("loggedInUser", email);
+
+        // Reset the form
+        document.getElementById("loginForm").reset();
+
+        // Update the login status in the sidebar
+        checkLoginStatus();
+      }
+
+      // Add event listener to the form submission
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", handleFormSubmit);
+
+      // Check login status on page load
+      checkLoginStatus();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p style="font-size: 20px; font-weight: bold">😎 Arya Logo 😎</p>
+          <h3 id="loggedInUser"></h3>
+          <!-- Tampilkan informasi pengguna yang login -->
+          <input
+            style="height: 30px; max-width: 200px"
+            type="text"
+            placeholder="Cari Sesuatu.."
+          />
+        </div>
+      </header>
+
+      <aside>
+        <ul>
+          <li><a href="./index.html">List</a></li>
+          <li><a href="./form.html">Form</a></li>
+          <li><a href="./video.html">Video</a></li>
+          <li><a href="./maps.html">Maps</a></li>
+          <li id="loginStatus">
+            <a href="./login.html">Login</a>
+          </li>
+        </ul>
+      </aside>
+
+      <main>
+        <article>
+          <h2>Tambahkan / Edit Peserta</h2>
+          <form id="myForm">
+            <div class="form-group">
+              <label for="nama">Nama:</label>
+              <input type="text" id="nama" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="mobil">Pilih Mobil:</label>
+              <select name="mobil" id="mobil" required>
+                <option value="Avanza">Avanza</option>
+                <option value="BMW">BMW</option>
+                <option value="Xenia">Xenia</option>
+                <option value="Ford">Ford</option>
+              </select>
+            </div>
+
+            <div
+              class="form-group"
+              style="display: flex; align-items: center; gap: 10px"
+            >
+              <label for="age">Pilih Umur:</label>
+              <input type="radio" id="age1" name="age" value="0 - 30" />
+              <label for="age1">0 - 30</label><br />
+              <input type="radio" id="age2" name="age" value="31 - 60" />
+              <label for="age2">31 - 60</label><br />
+              <input type="radio" id="age3" name="age" value="61 - 100" />
+              <label for="age3">61 - 100</label>
+            </div>
+
+            <div class="form-group">
+              <label for="w3review">Masukkan Pesan:</label><br />
+              <textarea
+                id="w3review"
+                name="w3review"
+                rows="4"
+                cols="50"
+                required
+              ></textarea>
+            </div>
+            <div style="display: flex; gap: 20px">
+              <input class="button-submit" type="submit" value="Simpan" />
+              <button
+                class="button-submit"
+                id="cancelButton"
+                type="button"
+                onclick="cancelEdit()"
+              >
+                Batal
+              </button>
+            </div>
+          </form>
+        </article>
+      </main>
+    </div>
+    <footer>
+      <h4>Dibuat dengan ❤️ oleh Arya</h4>
+      <p>Latihan HTML & CSS & Javascript DOM &copy; Copyright 2023</p>
+    </footer>
+    <script>
+      // Check if user is logged in
+      function checkLoginStatus() {
+        var isLoggedIn = localStorage.getItem("isLoggedIn");
+        var loggedInUser = localStorage.getItem("loggedInUser");
+
+        if (isLoggedIn) {
+          document.getElementById("loginStatus").innerHTML =
+            '<a href="#" onclick="logout()">Logout</a>';
+          document.getElementById("loggedInUser").textContent =
+            "User yang Login: " + loggedInUser;
+        }
+      }
+
+      // Function to log out the user
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("loggedInUser");
+        document.getElementById("loginStatus").innerHTML =
+          '<a href="./login.html">Login</a>';
+        document.getElementById("loggedInUser").textContent = "";
+      }
+
+      // Function to add a new row or update an existing row in the table
+      function saveData() {
+        // Get form values
+        var nama = document.getElementById("nama").value;
+        var email = document.getElementById("email").value;
+        var mobil = document.getElementById("mobil").value;
+        var umur = document.querySelector('input[name="age"]:checked').value;
+        var pesan = document.getElementById("w3review").value;
+
+        // Get the ID from the query parameter in the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get("id");
+
+        if (id) {
+          // If an ID is found, update the existing user data
+          var existingData = localStorage.getItem("formData");
+          if (existingData) {
+            var parsedData = JSON.parse(existingData);
+            var userData = parsedData.find(function (item) {
+              return item.id == id;
+            });
+            if (userData) {
+              userData.nama = nama;
+              userData.email = email;
+              userData.mobil = mobil;
+              userData.umur = umur;
+              userData.pesan = pesan;
+              localStorage.setItem("formData", JSON.stringify(parsedData));
+              console.log(formData);
+              Toastify({
+                text: "Data berhasil diperbarui!",
+                duration: 5000,
+                style: {
+                  background: "linear-gradient(to right, #00b09b, #96c93d)",
+                  marginTop: "100px",
+                },
+              }).showToast();
+
+              setTimeout(function () {
+                window.location.href = "./index.html";
+              }, 1000);
+              return;
+            }
+          }
+          Toastify({
+            text: "Data berhasil diperbarui!",
+            duration: 5000,
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+              marginTop: "100px",
+            },
+          }).showToast();
+
+          setTimeout(function () {
+            window.location.href = "./index.html";
+          }, 1000);
+        } else {
+          // If no ID is found, add a new user data
+          var id = generateId();
+          var formData = {
+            id: id,
+            nama: nama,
+            email: email,
+            mobil: mobil,
+            umur: umur,
+            pesan: pesan,
+          };
+          var existingData = localStorage.getItem("formData");
+
+          if (existingData) {
+            var parsedData = JSON.parse(existingData);
+            parsedData.push(formData);
+            localStorage.setItem("formData", JSON.stringify(parsedData));
+            console.log(formData);
+          } else {
+            var newData = [formData];
+            localStorage.setItem("formData", JSON.stringify(newData));
+          }
+          Toastify({
+            text: "Data berhasil disimpan!",
+            duration: 5000,
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+              marginTop: "100px",
+            },
+          }).showToast();
+          setTimeout(function () {
+            window.location.href = "./index.html";
+          }, 1000);
+        }
+      }
+
+      // Function to generate a unique ID
+      function generateId() {
+        var existingData = localStorage.getItem("formData");
+        if (existingData) {
+          var parsedData = JSON.parse(existingData);
+          return parsedData.length + 1;
+        }
+        return 1;
+      }
+
+      // Add event listener to the form submission
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent form submission
+          saveData(); // Call the saveData function to save/update the form data
+        });
+
+      // Function to get user data by ID
+      function getUserData(id) {
+        var existingData = localStorage.getItem("formData");
+        if (existingData) {
+          var parsedData = JSON.parse(existingData);
+          var userData = parsedData.find(function (item) {
+            return item.id == id;
+          });
+          return userData;
+          console.log(userData);
+        }
+        return null;
+      }
+
+      // Function to populate form with user data
+      function populateForm(userData) {
+        document.getElementById("nama").value = userData.nama;
+        document.getElementById("email").value = userData.email;
+        document.getElementById("mobil").value = userData.mobil;
+        document.getElementById("age1").checked = userData.umur === "0 - 30";
+        document.getElementById("age2").checked = userData.umur === "31 - 60";
+        document.getElementById("age3").checked = userData.umur === "61 - 100";
+        document.getElementById("w3review").value = userData.pesan;
+      }
+
+      // Function to cancel editing and redirect to index.html
+      function cancelEdit() {
+        window.location.href = "./index.html";
+      }
+
+      // Function to check editing mode and hide cancel button if no ID is found
+      function checkEditingMode() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get("id");
+        var cancelButton = document.getElementById("cancelButton");
+
+        if (!id) {
+          cancelButton.style.display = "none";
+        } else {
+          cancelButton.style.display = "inline-block";
+          var userData = getUserData(id);
+          if (userData) {
+            populateForm(userData);
+          } else {
+            Toastify({
+              text: "Data tidak ditemukan!",
+              duration: 5000,
+              style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                marginTop: "100px",
+              },
+            }).showToast();
+
+            setTimeout(function () {
+              window.location.href = "./index.html";
+            }, 1000);
+          }
+        }
+      }
+
+      checkLoginStatus();
+      checkEditingMode();
+    </script>
+  </body>
+</html>

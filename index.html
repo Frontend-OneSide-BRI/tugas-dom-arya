@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://unpkg.com/gridjs/dist/gridjs.production.min.js"></script>
+    <link
+      href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <p style="font-size: 20px; font-weight: bold">😎 Arya Logo 😎</p>
+          <h3 id="loggedInUser"></h3>
+          <input
+            style="height: 30px; max-width: 200px"
+            type="text"
+            placeholder="Cari Sesuatu.."
+          />
+        </div>
+      </header>
+      <section style="display: flex">
+        <aside style="min-width: 200px">
+          <ul>
+            <li><a href="./index.html">List</a></li>
+            <li><a href="./form.html">Form</a></li>
+            <li><a href="./video.html">Video</a></li>
+            <li><a href="./maps.html">Maps</a></li>
+            <li id="loginStatus">
+              <a href="./login.html">Login</a>
+            </li>
+          </ul>
+        </aside>
+        <main>
+          <article>
+            <h2>List Peserta</h2>
+            <div style="width: 95%" id="table-gridjs"></div>
+          </article>
+        </main>
+      </section>
+    </div>
+    <footer>
+      <h4>Dibuat dengan ❤️ oleh Arya</h4>
+      <p>Latihan HTML & CSS & Javascript DOM &copy; Copyright 2023</p>
+    </footer>
+    <script>
+      // Check if user is logged in
+      function checkLoginStatus() {
+        var isLoggedIn = localStorage.getItem("isLoggedIn");
+        var loggedInUser = localStorage.getItem("loggedInUser");
+
+        if (isLoggedIn) {
+          document.getElementById("loginStatus").innerHTML =
+            '<a href="#" onclick="logout()">Logout</a>';
+          document.getElementById("loggedInUser").textContent =
+            "User yang Login: " + loggedInUser;
+        }
+      }
+
+      // Function to log out the user
+      function logout() {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("loggedInUser");
+        document.getElementById("loginStatus").innerHTML =
+          '<a href="./login.html">Login</a>';
+        document.getElementById("loggedInUser").textContent = "";
+      }
+
+      // Function to remove a row from the table
+      function removeRow(id) {
+        // Remove the corresponding data from local storage
+        var data = localStorage.getItem("formData");
+        if (data) {
+          var parsedData = JSON.parse(data);
+          // Find the index of the object with the matching ID
+          var index = parsedData.findIndex(function (item) {
+            return item.id === parseInt(id);
+          });
+          // Remove the item from the array
+          if (index !== -1) {
+            parsedData.splice(index, 1);
+            // Update the data in local storage
+            localStorage.setItem("formData", JSON.stringify(parsedData));
+          }
+        }
+
+        // Reload the page to reflect the updated data
+        location.reload();
+      }
+
+      // Function to edit a user based on ID
+      function editUser(id) {
+        // Redirect to the form.html page with the user ID as a query parameter
+        window.location.href = "./form.html?id=" + id;
+      }
+
+      // Initialize Grid.js
+      const grid = new gridjs.Grid({
+        columns: [
+          "ID",
+          "Nama",
+          "Email",
+          "Mobil",
+          "Umur",
+          "Pesan",
+          {
+            name: "Action",
+            sort: false,
+            formatter: (_, row) => {
+              const id = row.cells[0].data;
+              return gridjs.html(`
+              <div style="display: flex; gap: 10px">
+                <button class="green-button" onclick="editUser(${id})">
+                <span>Edit</span>
+              </button>
+              <button class="red-button" onclick="removeRow(${id})">
+                <span>Delete</span>
+              </button></div>
+            
+            `);
+            },
+          },
+        ],
+        search: true,
+        resizable: true,
+        sort: true,
+        pagination: {
+          limit: 3,
+        },
+        data: [],
+      }).render(document.getElementById("table-gridjs"));
+
+      // Retrieve data from local storage for Grid.js
+      var gridData = localStorage.getItem("formData");
+
+      // Check if data exists in local storage
+      if (gridData) {
+        // Parse the JSON data
+        const parsedData = JSON.parse(gridData);
+
+        // Update the data in Grid.js
+        grid.updateConfig({ data: parsedData }).forceRender();
+      }
+    </script>
+  </body>
+</html>
